@@ -1,79 +1,40 @@
-// Переменные
-const refs = {
-   clockTimerDay: document.querySelector('[data-value="days"]'),
-   clockTimerHours: document.querySelector('[data-value="hours"]'),
-   clockTimerMins: document.querySelector('[data-value="mins"]'),
-   clockTimerSecs: document.querySelector('[data-value="secs"]'),
-};
+class CountdownTimer {
+  constructor({
+    selector,
+    targetDate
+  }) {
+    this.targetDate = new Date(targetDate);
+    this.daysSpan = document.querySelector(`${selector} .value[data-value="days"]`);
+    this.hoursSpan = document.querySelector(`${selector} .value[data-value="hours"]`);
+    this.minutesSpan = document.querySelector(`${selector} .value[data-value="mins"]`);
+    this.secondsSpan = document.querySelector(`${selector} .value[data-value="secs"]`);
+  }
+  
+  _pad(value) {
+    return value < 10 ? `0${value}` : value;
+  }
+  _countDowm() {
+    const currentTime = new Date();
+    this._createSpanValue(currentTime);
+  }
 
-const endTime ={
-  targetDate: new Date('Jul 22, 2021, 8:10:00'),
-};
+  showTime() {
+    setInterval(() => this._countDowm(), 1000);
+  }
 
-// Счетсик
-class Timer {
-   
-};
+  _createSpanValue(currentTime) {
+    const time = this.targetDate - currentTime;
+    this.daysSpan.textContent = this._pad(Math.floor(time / (1000 * 60 * 60 * 24)));
+    this.hoursSpan.textContent = this._pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    this.minutesSpan.textContent = this._pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+    this.secondsSpan.textContent = this._pad(Math.floor((time % (1000 * 60)) / 1000));
 
-const timer = {
-   start() {
-      const startTime = endTime.targetDate;
-      console.log(startTime);
+  }
+} 
 
-      setInterval(() => {
-         const currentTime = Date.now();
-         const deltaTime = (currentTime - startTime) * -1;
-         const { days, hours, mins, secs } = getTimeComponents(deltaTime);
-         if (currentTime === startTime) {
-            stopUpdateClockTimer()
-            return 
-          };
-         
-         updateClockTimer({ days, hours, mins, secs })
-         console.log(`${days}:${hours}:${mins}:${secs}`);
-      }, 1000);
-   }
-}
+const timer = new CountdownTimer({
+  selector: '#timer-1',
+  targetDate: new Date('Jul 23, 2021'),
+});
 
-timer.start()
-
-// Вывод в HTML 
-function updateClockTimer({ days, hours, mins, secs }) {
-   refs.clockTimerDay.textContent = `${days}`
-   refs.clockTimerHours.textContent = `${hours}`
-   refs.clockTimerMins.textContent = `${mins}`
-   refs.clockTimerSecs.textContent = `${secs}`
-};
-
-function stopUpdateClockTimer() {
-   refs.clockTimerDay.textContent = `00`
-   refs.clockTimerHours.textContent = `00`
-   refs.clockTimerMins.textContent = `00`
-   refs.clockTimerSecs.textContent = `00`
-};
-
-
-
-// Добавляет 0 - приводит к выводу значения 00
-function pad(value) {
-   return String(value).padStart(2, '0');
-};
-
-// Просчет времени - пересчет милисекунд
-function getTimeComponents(time) {
-   const days = pad(Math.floor(time / (1000 * 60 * 60 * 24)));
-   const hours = pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-   const mins = pad  (Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
-   const secs = pad(Math.floor((time % (1000 * 60)) / 1000));
-   return { days, hours, mins, secs };
-};
-
-
-
-///////////
-// new CountdownTimer({
-//   selector: '#timer-1',
-//   targetDate: new Date('Jul 17, 2019'),
-// });
-
-
+timer.showTime();
