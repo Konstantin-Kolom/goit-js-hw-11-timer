@@ -5,4 +5,4 @@ class t{constructor({selector:t,targetDate:e}){this.targetDate=new Date(e),this.
 },{}],"Focm":[function(require,module,exports) {
 "use strict";require("../node_modules/normalize.css/normalize.css"),require("./sass/main.scss"),require("./js/them.js");
 },{"../node_modules/normalize.css/normalize.css":"DOAq","./sass/main.scss":"DOAq","./js/them.js":"TcNV"}]},{},["Focm"], null)
-//# sourceMappingURL=/goit-js-hw-11-timer/src.966c062e.js.map
+//# sourceMappingURL=/goit-js-hw-11-timer/src.75229d3a.js.map
