@@ -1,32 +1,79 @@
-new CountdownTimer({
-  selector: '#timer-1',
-  targetDate: new Date('Jul 17, 2019'),
-});
+// Переменные
+const refs = {
+   clockTimerDay: document.querySelector('[data-value="days"]'),
+   clockTimerHours: document.querySelector('[data-value="hours"]'),
+   clockTimerMins: document.querySelector('[data-value="mins"]'),
+   clockTimerSecs: document.querySelector('[data-value="secs"]'),
+};
 
-////////////////
-/*
- * Оставшиеся дни: делим значение UTC на 1000 * 60 * 60 * 24, количество
- * миллисекунд в одном дне (миллисекунды * секунды * минуты * часы)
- */
-const days = Math.floor(time / (1000 * 60 * 60 * 24));
+const endTime ={
+  targetDate: new Date('Jul 22, 2021, 8:10:00'),
+};
 
-/*
- * Оставшиеся часы: получаем остаток от предыдущего расчета с помощью оператора
- * остатка % и делим его на количество миллисекунд в одном часе
- * (1000 * 60 * 60 = миллисекунды * минуты * секунды)
- */
-const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+// Счетсик
+class Timer {
+   
+};
 
-/*
- * Оставшиеся минуты: получаем оставшиеся минуты и делим их на количество
- * миллисекунд в одной минуте (1000 * 60 = миллисекунды * секунды)
- */
-const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+const timer = {
+   start() {
+      const startTime = endTime.targetDate;
+      console.log(startTime);
 
-/*
- * Оставшиеся секунды: получаем оставшиеся секунды и делим их на количество
- * миллисекунд в одной секунде (1000)
- */
-const secs = Math.floor((time % (1000 * 60)) / 1000);
-////////////////
+      setInterval(() => {
+         const currentTime = Date.now();
+         const deltaTime = (currentTime - startTime) * -1;
+         const { days, hours, mins, secs } = getTimeComponents(deltaTime);
+         if (currentTime === startTime) {
+            stopUpdateClockTimer()
+            return 
+          };
+         
+         updateClockTimer({ days, hours, mins, secs })
+         console.log(`${days}:${hours}:${mins}:${secs}`);
+      }, 1000);
+   }
+}
+
+timer.start()
+
+// Вывод в HTML 
+function updateClockTimer({ days, hours, mins, secs }) {
+   refs.clockTimerDay.textContent = `${days}`
+   refs.clockTimerHours.textContent = `${hours}`
+   refs.clockTimerMins.textContent = `${mins}`
+   refs.clockTimerSecs.textContent = `${secs}`
+};
+
+function stopUpdateClockTimer() {
+   refs.clockTimerDay.textContent = `00`
+   refs.clockTimerHours.textContent = `00`
+   refs.clockTimerMins.textContent = `00`
+   refs.clockTimerSecs.textContent = `00`
+};
+
+
+
+// Добавляет 0 - приводит к выводу значения 00
+function pad(value) {
+   return String(value).padStart(2, '0');
+};
+
+// Просчет времени - пересчет милисекунд
+function getTimeComponents(time) {
+   const days = pad(Math.floor(time / (1000 * 60 * 60 * 24)));
+   const hours = pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+   const mins = pad  (Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+   const secs = pad(Math.floor((time % (1000 * 60)) / 1000));
+   return { days, hours, mins, secs };
+};
+
+
+
+///////////
+// new CountdownTimer({
+//   selector: '#timer-1',
+//   targetDate: new Date('Jul 17, 2019'),
+// });
+
 
